@@ -1,0 +1,8 @@
+this line is partially edited
+fully edited line
+
+this line must not be modified
+a whole block
+of text has
+been
+replaced here

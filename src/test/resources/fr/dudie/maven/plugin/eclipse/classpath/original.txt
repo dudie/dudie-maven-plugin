@@ -1,0 +1,8 @@
+this line can be partially edited
+this line can be fully edited
+this line can be removed
+this line must not be modified
+this 
+    block
+    of text 
+can be fully modified

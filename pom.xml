@@ -15,6 +15,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <scm>
+        <connection>scm:git:ssh://git@github.com/dudie/dudie-maven-plugin</connection>
+        <developerConnection>scm:git:ssh://git@github.com/dudie/dudie-maven-plugin</developerConnection>
+        <url>https://www.github.com/dudie/dudie-maven-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>

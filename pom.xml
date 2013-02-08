@@ -9,11 +9,20 @@
 
     <name>dudie-maven-plugin Maven Mojo</name>
     <description>Some maven tools for Dudie projects</description>
-    <url>http://github.com/dudie/dudie-maven-plugin</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <inceptionYear>2013</inceptionYear>
+    <url>http://dudie.github.com/dudie-maven-plugin</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0 or later</name>
+            <url>http://www.spdx.org/licenses/GPL-3.0+</url>
+        </license>
+    </licenses>
 
     <scm>
         <connection>scm:git:ssh://git@github.com/dudie/dudie-maven-plugin</connection>
@@ -21,6 +30,17 @@
         <url>https://www.github.com/dudie/dudie-maven-plugin</url>
         <tag>HEAD</tag>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>dudie-github-releases</id>
+            <url>https://dudie.github.com/dudie-maven-plugin/repository/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>dudie-github-snapshots</id>
+            <url>https://dudie.github.com/dudie-maven-plugin/repository/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -69,20 +89,57 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.0</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                    <configuration>
+                        <altDeploymentRepository>local::default::file://${project.build.directory}/repository</altDeploymentRepository>
+                        <uniqueVersion>false</uniqueVersion>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.7</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.2</version>
                 <configuration>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
@@ -103,4 +160,37 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>site-maven-plugin</artifactId>
+                        <configuration>
+                            <message>deploying artefacts for version ${project.version}</message>
+                            <merge>true</merge>
+                            <outputDirectory>${project.build.directory}/repository</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>site</goal>
+                                </goals>
+                                <phase>deploy</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

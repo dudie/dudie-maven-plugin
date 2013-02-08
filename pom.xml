@@ -34,11 +34,11 @@
     <distributionManagement>
         <repository>
             <id>dudie-github-releases</id>
-            <url>https://dudie.github.com/dudie-maven-plugin/repository/releases</url>
+            <url>http://dudie.github.com/dudie-maven-plugin/repository/releases</url>
         </repository>
         <snapshotRepository>
             <id>dudie-github-snapshots</id>
-            <url>https://dudie.github.com/dudie-maven-plugin/repository/snapshots</url>
+            <url>http://dudie.github.com/dudie-maven-plugin/repository/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -120,7 +120,7 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>2.7</version>
                     <configuration>
-                        <altDeploymentRepository>local::default::file://${project.build.directory}/repository</altDeploymentRepository>
+                        <altDeploymentRepository>local::default::file://${project.build.directory}/gh-pages/repository/snapshots</altDeploymentRepository>
                         <uniqueVersion>false</uniqueVersion>
                     </configuration>
                 </plugin>
@@ -133,6 +133,13 @@
                     <groupId>com.github.github</groupId>
                     <artifactId>site-maven-plugin</artifactId>
                     <version>0.7</version>
+                    <configuration>
+                        <message>deploying artefacts for version
+                            ${project.version}</message>
+                        <merge>true</merge>
+                        <outputDirectory>${project.build.directory}/gh-pages</outputDirectory>
+                        <noJekyll>true</noJekyll>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -158,6 +165,19 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy-artefacts-to-github-repository</id>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -166,28 +186,18 @@
             <id>release</id>
             <activation>
                 <property>
-                    <name>release</name>
-                    <value>true</value>
+                    <name>performRelease</name>
                 </property>
             </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.github.github</groupId>
-                        <artifactId>site-maven-plugin</artifactId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
                         <configuration>
-                            <message>deploying artefacts for version ${project.version}</message>
-                            <merge>true</merge>
-                            <outputDirectory>${project.build.directory}/repository</outputDirectory>
+                            <altDeploymentRepository>local::default::file://${project.build.directory}/gh-pages/repository/releases</altDeploymentRepository>
+                            <updateReleaseInfo>true</updateReleaseInfo>
                         </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>site</goal>
-                                </goals>
-                                <phase>deploy</phase>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>

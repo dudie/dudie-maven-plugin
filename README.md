@@ -4,6 +4,8 @@ dudie-maven-plugin
 
 This is a plugin with some utilities for android development.
 
+* [![build status](https://secure.travis-ci.org/dudie/dudie-maven-plugin.png)](https://travis-ci.org/dudie/dudie-maven-plugin) on travis-ci.org (master branch)
+
 ### Usage
 
 Dclare a `<pluginRepository/>` in your pom:
